@@ -4,11 +4,10 @@
     <h1>Angular University</h1>
     <a href="https://angular-university.io">angular-university.io</a>
   </div>
-  <div *ngIf="todosStore.getLoading(); else todosList">
+  @if(todosStore.getLoading()) {
     <mat-progress-spinner></mat-progress-spinner>
-  </div>
-  <ng-template #todosList>
+  } @else {
     <app-todos-list></app-todos-list>
-  </ng-template>
+  }
 
 </div>
