@@ -1,0 +1,14 @@
+<div class="app">
+  <div class="angular-univ-container">
+    <img class="img-fluid" alt="" src="assets/angular_icon.png"/>
+    <h1>Angular University</h1>
+    <a href="https://angular-university.io">angular-university.io</a>
+  </div>
+  <div *ngIf="todosStore.getLoading(); else todosList">
+    <mat-progress-spinner></mat-progress-spinner>
+  </div>
+  <ng-template #todosList>
+    <app-todos-list></app-todos-list>
+  </ng-template>
+
+</div>
