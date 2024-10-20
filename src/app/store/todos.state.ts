@@ -2,14 +2,7 @@ import {patchState, signalStore, withComputed, withMethods, withState} from "@ng
 import {Todo} from "../models/todo.models";
 import {computed, inject} from "@angular/core";
 import {TodosService} from "../services/todos.service";
-
-export type TodosFilter = "all" | "pending" | "completed";
-
-type TodosState = {
-  todos: Todo[],
-  loading: boolean,
-  filter: TodosFilter
-}
+import {TodosFilter, TodosState} from "./todo-state-model";
 
 const initialState: TodosState = {
   todos: [],
@@ -25,11 +18,15 @@ export const TodosStore = signalStore(
       async loadAll() {
         console.debug("loadAll() chiamato");  // Log per il debug
         patchState(store, { loading: true });
-
-        const todos = await todosService.getTodos();
-
-        console.debug("Loading:", store.loading());  // Log per verificare i dati
-        patchState(store, { todos, loading: false });
+        try {
+          const todos = await todosService.getTodos();
+          patchState(store, { todos });
+        } catch (e) {
+          console.error("Errore durante il caricamento dei todos", e);
+        } finally {
+          console.debug("Loading:", store.loading());  // Log per verificare i dati
+          patchState(store, { loading: false });
+        }
       },
       async addTodo(title: string) {
         const todo = await todosService.addTodo({title, completed: false});
@@ -54,6 +51,9 @@ export const TodosStore = signalStore(
       },
       getLoading() {
         return store.loading();
+      },
+      setloading(loading: boolean) {
+        patchState(store, {loading})
       }
     })
   ),withComputed((state) => ({
