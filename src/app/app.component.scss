@@ -1,24 +1,27 @@
 @import "./../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
 
-.app{
+.app {
   display: flex;
   flex-direction: column;
   padding-top: 100px;
 }
 
-.angular-univ-container{
+.angular-univ-container {
   margin-bottom: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  h1{
+
+  h1 {
     font-size: 40px;
     margin-top: 20px;
   }
-  img{
+
+  img {
     border-radius: 200px;
     max-height: 200px
   }
+
   a {
     font-size: 20px;
   }
@@ -31,4 +34,11 @@ mat-progress-spinner {
   display: block;
   margin: 0 auto;
   color: #000000;
+}
+
+.mat-spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vh;
 }

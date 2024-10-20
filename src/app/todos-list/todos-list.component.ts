@@ -1,12 +1,13 @@
 import {Component, effect, inject, viewChild} from '@angular/core';
-import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
+import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatIcon} from "@angular/material/icon";
 import {MatTabGroup} from "@angular/material/tabs";
 import {MatButtonToggle, MatButtonToggleChange, MatButtonToggleGroup} from "@angular/material/button-toggle";
 import {MatListOption, MatSelectionList} from "@angular/material/list";
-import {TodosFilter, TodosStore} from "../store/todos.state";
+import {TodosStore} from "../store/todos.state";
 import {CommonModule, NgIf, NgStyle} from "@angular/common";
+import {TodosFilter} from '../store/todo-state-model';
 
 @Component({
   selector: 'app-todos-list',
@@ -40,17 +41,37 @@ export class TodosListComponent {
   }
 
   async onAddTodo(inputValue: string) {
-    await this.todosStore.addTodo(inputValue);
+    this.todosStore.setloading(true);
+    try {
+      await this.todosStore.addTodo(inputValue);
+    } catch (e) {
+      console.error("Errore durante l'aggiunta del todo", e);
+    } finally {
+      this.todosStore.setloading(false);
+    }
   }
 
-  async onDeleteTodo(id: number, event: MouseEvent) {
+  async onDeleteTodo(id: number, event: MouseEvent | KeyboardEvent) {
     event.stopPropagation();
-    await this.todosStore.deleteTodo(id);
+    this.todosStore.setloading(true);
+    try {
+      await this.todosStore.deleteTodo(id);
+    } catch (e) {
+      console.error("Errore durante l'eliminazione del todo", e);
+    } finally {
+      this.todosStore.setloading(false);
+    }
   }
 
   async onTodoToggled(id: number, completed: boolean) {
-    await this.todosStore.updateToDo(id, completed);
-
+    this.todosStore.setloading(true);
+    try {
+      await this.todosStore.updateToDo(id, completed);
+    } catch (e) {
+      console.error("Errore durante l'aggiornamento del todo", e);
+    } finally {
+      this.todosStore.setloading(false);
+    }
   }
 
   onFilterTodos(event: MatButtonToggleChange) {
