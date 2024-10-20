@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {TodosStore} from "./store/todos.state";
 import {CommonModule, JsonPipe, NgOptimizedImage} from "@angular/common";
@@ -14,15 +14,14 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 })
 export class AppComponent implements OnInit {
   todosStore = inject(TodosStore)
-  isLoading = signal<boolean>(false);
+  isLoading = this.todosStore.loadingSignal();
 
-  ngOnInit() {
-    console.log("loading = ", this.todosStore.loading());
-    this.isLoading.set(true);
-    this.loadTodos().then(() => {
-      console.log("loading = ", this.todosStore.loading());
-      this.isLoading.set(false);
-    })
+  async ngOnInit() {
+    try {
+      await this.loadTodos();
+    } catch (e) {
+      console.error("Failed to load todos", e);
+    }
   }
 
   async loadTodos() {
