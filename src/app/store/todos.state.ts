@@ -43,22 +43,43 @@ export const TodosStore = signalStore(
         }
       },
       async addTodo(title: string) {
-        const todo = await todosService.addTodo({title, completed: false});
-        patchState(store, (state) => ({
-          todos: [...state.todos, todo]
-        }))
+        patchState(store, {loading: true});
+        try {
+          const todo = await todosService.addTodo({title, completed: false});
+          patchState(store, (state) => ({
+            todos: [...state.todos, todo]
+          }))
+        } catch (e) {
+          console.error("Errore durante l'aggiunta del todo", e);
+        } finally {
+          patchState(store, {loading: false});
+        }
       },
       async deleteTodo(id: number) {
-        await todosService.deleteTodo(id);
-        patchState(store, (state) => ({
-          todos: [...state.todos.filter((todo: Todo) => todo.id !== id)]
-        }))
+        patchState(store, {loading: true});
+        try {
+          await todosService.deleteTodo(id);
+          patchState(store, (state) => ({
+            todos: [...state.todos.filter((todo: Todo) => todo.id !== id)]
+          }))
+        } catch (e) {
+          console.error("Errore durante l'eliminazione del todo", e);
+        } finally {
+          patchState(store, {loading: false});
+        }
       },
       async updateToDo(id: number, completed: boolean) {
-        await todosService.updateTodo(id, completed);
-        patchState(store, (state) => ({
-          todos: [...state.todos.map(todo => todo.id === id ? {...todo, completed} : todo)]
-        }))
+        patchState(store, {loading: true});
+        try {
+          await todosService.updateTodo(id, completed);
+          patchState(store, (state) => ({
+            todos: [...state.todos.map(todo => todo.id === id ? {...todo, completed} : todo)]
+          }))
+        } catch (e) {
+          console.error("Errore durante l'aggiornamento del todo", e);
+        } finally {
+          patchState(store, {loading: false});
+        }
       },
       updateFilter(filter: TodosFilter) {
         patchState(store, {filter})
