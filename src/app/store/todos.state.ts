@@ -1,6 +1,6 @@
 import {patchState, signalStore, withComputed, withMethods, withState} from "@ngrx/signals";
 import {Todo} from "../models/todo.models";
-import {computed, inject, signal} from "@angular/core";
+import {computed, inject} from "@angular/core";
 import {TodosService} from "../services/todos.service";
 import {TodosFilter, TodosState} from "./todo-state-model";
 
@@ -27,7 +27,6 @@ export const TodosStore = signalStore(
           return todos; // Fallback nel caso in cui il filtro non corrisponda a nessun caso
       }
     }),
-    loadingSignal: signal(state.loading)
   })),
   withMethods(
     (store, todosService = inject(TodosService)) => ({
