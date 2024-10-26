@@ -14,7 +14,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 })
 export class AppComponent implements OnInit {
   todosStore = inject(TodosStore)
-  isLoading = this.todosStore.loadingSignal();
+
+  public loading = this.todosStore.loading;
 
   async ngOnInit() {
     try {
